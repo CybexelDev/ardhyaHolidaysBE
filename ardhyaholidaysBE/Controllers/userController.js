@@ -1,5 +1,6 @@
 const VEHICLE = require('../Models/vehicleModel')
 const CATEGORY = require('../Models/categoryModel')
+const PACKAGE = require('../Models/packageModel')
 
 
 
@@ -29,5 +30,17 @@ const getCategory = async (req, res) => {
 }
 
 
+const getPackageData = async (req, res) => {
+  try{
 
-module.exports = { getVahicleData, getCategory }
+    const packageData = await  PACKAGE.find();
+    res.status(200).json({ data : packageData });
+
+  }catch(error){
+    console.error('Error fetching package data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+module.exports = { getVahicleData, getCategory, getPackageData }

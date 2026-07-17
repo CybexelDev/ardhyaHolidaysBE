@@ -3,6 +3,7 @@ const CATEGORY = require('../Models/categoryModel');
 const { upload } = require('../config/cloudinary');
 const { cloudinary } = require('../config/cloudinary');
 const VEHICLE = require('../Models/vehicleModel')
+const PACKAGE = require("../Models/packageModel");
 
 
 const getPublicIdFromUrl = (url) => {
@@ -81,7 +82,6 @@ const updateVehicleData = async (req, res) => {
       });
     }
 
-    // Parse old images
     let existingImages = [];
 
     if (oldImages) {
@@ -91,12 +91,12 @@ const updateVehicleData = async (req, res) => {
           : oldImages;
     }
 
-    // Upload new images
+    
     const newImages = req.files
       ? req.files.map((file) => file.path)
       : [];
 
-    // Delete removed images from Cloudinary
+ 
     const deletedImages = vehicle.Image.filter(
       (img) => !existingImages.includes(img)
     );
@@ -115,7 +115,7 @@ const updateVehicleData = async (req, res) => {
       }
     }
 
-    // Final images
+
     vehicle.Image = [...existingImages, ...newImages];
 
     vehicle.vehicleName = vehicleName;
@@ -154,5 +154,87 @@ const updateVehicleData = async (req, res) => {
 };
 
 
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData }
 
+const addPackageData = async (req, res) => {
+  try {
+    const { packageName, subTitle, Location, Duration, Description, Days,} = req.body;
+
+
+    const photos = req.files.map((file) => file.path);
+
+    let daysArray = [];
+
+    if (Days) {
+      daysArray = JSON.parse(Days);
+    }
+
+    const newPackage = new PACKAGE({
+      Image: photos,
+      packageName,
+      subTitle,
+      Location,
+      Duration,
+      Description,
+      Days: daysArray,
+    });
+
+    const savedPackage = await newPackage.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Package added successfully",
+      package: savedPackage,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+const deletePackageData = async (req, res) => {
+  const packageId = req.params.id;
+  try{
+    const deletedpackage = await PACKAGE.findByIdAndDelete(packageId);
+    res.status(200).json({message:'Package data deleted successfully', package: deletedpackage});
+  } catch (error) {
+    console.error('Error deleting package data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+const addCategory = async (req, res) => {
+  console.log(req.body, "rrrrrrrrrrrrrrrrrrrrrrrrr")
+  try {
+    const { categoryName } = req.body;
+
+    const newCategory = new CATEGORY({
+      categoryName,
+    });
+
+    const savedCategory = await newCategory.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Category added successfully",
+      category: savedCategory,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+
+
+module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory }
