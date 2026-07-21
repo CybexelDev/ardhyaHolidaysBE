@@ -234,7 +234,80 @@ const addCategory = async (req, res) => {
 };
 
 
+const updatePackageData = async (req, res) => {
+  try {
+    const packageId = req.params.id;
+
+    const {
+      packageName,
+      subTitle,
+      Location,
+      Duration,
+      Description,
+      Days,
+      oldImages,
+    } = req.body;
+
+    const packageData = await PACKAGE.findById(packageId);
+
+    if (!packageData) {
+      return res.status(404).json({
+        success: false,
+        message: "Package not found",
+      });
+    }
+
+    // Existing images
+    let imageArray = [];
+
+    if (oldImages) {
+      imageArray =
+        typeof oldImages === "string"
+          ? JSON.parse(oldImages)
+          : oldImages;
+    }
+
+    // New uploaded images
+    if (req.files && req.files.length > 0) {
+      const newImages = req.files.map((file) => file.path);
+      imageArray = [...imageArray, ...newImages];
+    }
+
+    // Days array
+    let daysArray = packageData.Days;
+
+    if (Days) {
+      daysArray = JSON.parse(Days);
+    }
+
+    packageData.Image = imageArray;
+    packageData.packageName = packageName;
+    packageData.subTitle = subTitle;
+    packageData.Location = Location;
+    packageData.Duration = Duration;
+    packageData.Description = Description;
+    packageData.Days = daysArray;
+
+    await packageData.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Package updated successfully",
+      package: packageData,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 
 
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory }
+
+
+module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData }

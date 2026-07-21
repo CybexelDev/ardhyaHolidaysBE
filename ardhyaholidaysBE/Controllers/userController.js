@@ -1,6 +1,8 @@
+const mongoose = require("mongoose");
 const VEHICLE = require('../Models/vehicleModel')
 const CATEGORY = require('../Models/categoryModel')
 const PACKAGE = require('../Models/packageModel')
+const VEHICLEBOOKING = require('../Models/vehicleBookingModal')
 
 
 
@@ -43,4 +45,85 @@ const getPackageData = async (req, res) => {
 }
 
 
-module.exports = { getVahicleData, getCategory, getPackageData }
+const relatedVehicles = async (req, res) => {
+  try {
+    const { CategoryId, SeatCapacity } = req.body;
+
+    const vehicles = await VEHICLE.aggregate([
+      {
+        $match: {
+          CategoryId: CategoryId,
+          SeatCapacity: SeatCapacity,
+        },
+      },
+      {
+        $project: {
+          vehicleName: 1,
+          vehicleNumber: 1,
+          SeatCapacity: 1,
+          RentPerKLM: 1,
+          Image: 1,
+          Location: 1,
+          StarRating: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      count: vehicles.length,
+      vehicles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+const bookingVehicle = async (req, res) =>{
+    try{
+           const { vehicleId, pickupDate, returnDate, customerName, customerNumber } = req.body;
+           const vehicle = await VEHICLE.findById(vehicleId);
+
+              if (!vehicle) {
+                return res.status(404).json({
+                  success: false,
+                  message: "Vehicle not found",
+                });
+              }
+                
+              const newBooking = new VEHICLEBOOKING({
+                vehicleId,
+                pickupDate,
+                returnDate,
+                customerName,
+                customerNumber,
+              });
+
+                const savedBooking = await newBooking.save();
+
+                res.status(201).json({
+                  success: true,
+                  message: "Vehicle booked successfully",
+                  booking: savedBooking,
+                });
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: error.message,
+          });
+    }
+}
+
+
+
+
+
+
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle }

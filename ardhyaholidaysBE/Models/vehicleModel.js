@@ -59,7 +59,7 @@ const vehiclesSchema = mongoose.Schema({
         type: [String],
         required: false
     },
-    Category: {
+    CategoryId: {
         type: String,
         required: true
     },
