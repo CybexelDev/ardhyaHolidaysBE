@@ -399,4 +399,4 @@ const deleteTestimonial = async (req, res) => {
  
 
 
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory }
+module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory }
