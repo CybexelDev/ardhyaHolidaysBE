@@ -86,7 +86,9 @@ const relatedVehicles = async (req, res) => {
 
 const bookingVehicle = async (req, res) =>{
     try{
-           const { vehicleId, pickupDate, returnDate, customerName, customerNumber } = req.body;
+           const { vehicleId, pickupDate, returnDate, customerName, customerPhone } = req.body;
+         
+           
            const vehicle = await VEHICLE.findById(vehicleId);
 
               if (!vehicle) {
@@ -101,7 +103,7 @@ const bookingVehicle = async (req, res) =>{
                 pickupDate,
                 returnDate,
                 customerName,
-                customerNumber,
+                customerPhone,
               });
 
                 const savedBooking = await newBooking.save();

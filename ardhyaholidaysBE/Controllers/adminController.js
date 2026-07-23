@@ -4,6 +4,7 @@ const { upload } = require('../config/cloudinary');
 const { cloudinary } = require('../config/cloudinary');
 const VEHICLE = require('../Models/vehicleModel')
 const PACKAGE = require("../Models/packageModel");
+const VEHICLEBOOKING = require('../Models/vehicleBookingModal')
 
 
 const getPublicIdFromUrl = (url) => {
@@ -308,6 +309,26 @@ const updatePackageData = async (req, res) => {
 
 
 
+const vehicleBooking = async (req, res) => {
+  try{
+    const bookings = await VEHICLEBOOKING.find().populate('vehicleId', 'vehicleName vehicleNumber SeatCapacity Image');
+    res.status(200).json({
+      success: true,
+      count: bookings.length,
+      bookings,
+    });
+
+  }catch(error){
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
 
 
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData }
+
+
+
+module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking }

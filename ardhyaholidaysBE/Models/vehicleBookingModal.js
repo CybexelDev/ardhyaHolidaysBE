@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 
 const vehicleBookingSchema = mongoose.Schema({
 
-    vehicleId: {
-        type: String,
-        required: true
-    },
+     vehicleId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "vehicles",  
+    required: true,
+  },
     pickupDate: {
         type: Date,
         required: true
