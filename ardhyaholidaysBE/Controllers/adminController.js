@@ -236,6 +236,28 @@ const addCategory = async (req, res) => {
   }
 };
 
+const deleteCategory = async (req, res) => {
+  const categoryId = req.params.id;
+  try {
+    const deletedCategory = await CATEGORY.findByIdAndDelete(categoryId);
+    res.status(200).json({ message: 'Category data deleted successfully', category: deletedCategory });
+  } catch (error) {
+    console.error('Error deleting category data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const updateCategory = async (req, res) => {
+  const categoryId = req.params.id;
+  const { categoryName } = req.body;
+  try {
+    const updatedCategory = await CATEGORY.findByIdAndUpdate(categoryId, { categoryName }, { new: true });
+    res.status(200).json({ message: 'Category data updated successfully', category: updatedCategory });
+  } catch (error) {
+    console.error('Error updating category data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 const updatePackageData = async (req, res) => {
   try {
@@ -374,7 +396,7 @@ const deleteTestimonial = async (req, res) => {
   }
 }
 
+ 
 
 
-
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial }
+module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory }
