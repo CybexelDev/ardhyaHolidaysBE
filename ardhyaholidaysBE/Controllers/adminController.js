@@ -5,7 +5,7 @@ const { cloudinary } = require('../config/cloudinary');
 const VEHICLE = require('../Models/vehicleModel')
 const PACKAGE = require("../Models/packageModel");
 const VEHICLEBOOKING = require('../Models/vehicleBookingModal')
-
+const TESTIMONIALS = require("../Models/testimonialsModel");
 
 const getPublicIdFromUrl = (url) => {
   const match = url.match(/\/upload\/v\d+\/(.+)\.[a-zA-Z0-9]+$/);
@@ -15,7 +15,7 @@ const getPublicIdFromUrl = (url) => {
 
 const addVehicleData = async (req, res) => {
 
-  const { vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, AdvancePayment, TollCharges, Features } = req.body;
+  const { vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, AdvancePayment, TollCharges, Features, CategoryId,  Premium } = req.body;
 
   const photos = req.files.map((file) => {
     return file.path
@@ -39,7 +39,9 @@ const addVehicleData = async (req, res) => {
       RentPerKLM,
       AdvancePayment,
       TollCharges,
-      Features: featuresArray
+      Features: featuresArray,
+      CategoryId,
+      Premium
     })
 
     const savedVehicle = await newVehicle.save();
@@ -328,7 +330,51 @@ const vehicleBooking = async (req, res) => {
 }
 
 
+const addTestimonial = async (req, res) => {
+
+  try {
+    const { name, position, content } = req.body;
+
+    const photos = req.files.map((file) => file.path);
+
+    const newTestimonial = new TESTIMONIALS({
+      Image : photos,
+      name,
+      position,
+      content,
+    });
+
+    const savedTestimonial = await newTestimonial.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Testimonial added successfully",
+      testimonial: savedTestimonial,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+const deleteTestimonial = async (req, res) => {
+  const testimonialId = req.params.id;
+   
+  try {
+    const deletedTestimonial = await TESTIMONIALS.findByIdAndDelete(testimonialId);
+    res.status(200).json({ message: 'Testimonial data deleted successfully', testimonial: deletedTestimonial });
+  } catch (error) {
+    console.error('Error deleting testimonial data:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 
 
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking }
+
+module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial }

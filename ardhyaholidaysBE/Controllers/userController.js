@@ -3,7 +3,7 @@ const VEHICLE = require('../Models/vehicleModel')
 const CATEGORY = require('../Models/categoryModel')
 const PACKAGE = require('../Models/packageModel')
 const VEHICLEBOOKING = require('../Models/vehicleBookingModal')
-
+const TESTIMONIALS = require("../Models/testimonialsModel");
 
 
 const getVahicleData = async (req, res) => {
@@ -124,8 +124,26 @@ const bookingVehicle = async (req, res) =>{
 }
 
 
+const getTestimonials = async (req, res) => {
+  try {
+    const testimonials = await TESTIMONIALS.find();
+    res.status(200).json({  
+success: true,
+      count: testimonials.length,
+      testimonials,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
 
 
 
 
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle }
+
+
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials };

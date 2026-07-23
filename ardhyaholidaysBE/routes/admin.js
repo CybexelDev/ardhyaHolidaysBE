@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const uploadsMulter = require('../config/cloudinary');
-const { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData,  addCategory, updatePackageData, vehicleBooking} = require('../Controllers/adminController')
+const { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData,  addCategory, updatePackageData, vehicleBooking, addTestimonial, deleteTestimonial} = require('../Controllers/adminController')
 const { getVahicleData, getCategory,  getPackageData} = require('../Controllers/userController')
 
 router.post('/addVehicleData', uploadsMulter, addVehicleData);
@@ -18,6 +18,9 @@ router.get('/vehiclebooking', vehicleBooking)
 router.get('/getVahicleData', getVahicleData)
 router.get('/getCategory', getCategory)
 router.get('/getPackageData', getPackageData)
+
+router.post('/addTestimonial', uploadsMulter, addTestimonial);
+router.delete('/deleteTestimonial/:id', deleteTestimonial);
 
 
 module.exports = router;

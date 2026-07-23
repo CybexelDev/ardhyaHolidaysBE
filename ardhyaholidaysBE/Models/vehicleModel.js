@@ -63,6 +63,10 @@ const vehiclesSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    Premium: {
+        type: Boolean,
+        required: true
+    }
 
 })
 
