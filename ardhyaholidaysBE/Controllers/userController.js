@@ -214,4 +214,30 @@ const vehicleDetails = async (req, res) => {
 };
 
 
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails };
+const packageDetails = async (req, res) => {
+  try {
+    const { packageId } = req.params;
+    const package = await PACKAGE.findById(packageId);
+
+    if (!package) {
+      return res.status(404).json({
+        success: false,
+        message: "Package not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      package,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails };
