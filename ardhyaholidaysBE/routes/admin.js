@@ -3,32 +3,33 @@ const router = express.Router()
 const uploadsMulter = require('../config/cloudinary');
 const {adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData,  addCategory, updatePackageData, vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory, createAdmin} = require('../Controllers/adminController')
 const { getVahicleData, getCategory,  getPackageData, getTestimonials} = require('../Controllers/userController')
+const verifyAdmin = require('../middleware/auth')
 
 router.post("/createAdmin", createAdmin);
 router.post("/adminLogin", adminLogin);
 
-router.post('/addVehicleData', uploadsMulter, addVehicleData);
-router.delete('/deleteVehicle/:id', deleteVehicleData);
-router.put('/updateVehicle/:id', uploadsMulter, updateVehicleData);
-router.get('/getVahicleData', getVahicleData)
+router.post('/addVehicleData',verifyAdmin, uploadsMulter, addVehicleData);
+router.delete('/deleteVehicle/:id', verifyAdmin, deleteVehicleData);
+router.put('/updateVehicle/:id',verifyAdmin, uploadsMulter, updateVehicleData);
+router.get('/getVahicleData',verifyAdmin, getVahicleData)
 
-router.post('/addPackage', uploadsMulter, addPackageData);
-router.delete('/deletePackage/:id', deletePackageData);
-router.put('/updatePackage/:id', uploadsMulter, updatePackageData);
-router.get('/getPackageData', getPackageData)
+router.post('/addPackage', verifyAdmin, uploadsMulter, addPackageData);
+router.delete('/deletePackage/:id',verifyAdmin, deletePackageData);
+router.put('/updatePackage/:id',verifyAdmin, uploadsMulter, updatePackageData);
+router.get('/getPackageData',verifyAdmin, getPackageData)
 
-router.post('/addCategory', addCategory);
-router.get('/getCategory', getCategory)
-router.delete('/deleteCategory/:id', deleteCategory)
-router.put('/updateCategory/:id', updateCategory);
+router.post('/addCategory',verifyAdmin, addCategory);
+router.get('/getCategory',verifyAdmin, getCategory)
+router.delete('/deleteCategory/:id',verifyAdmin, deleteCategory)
+router.put('/updateCategory/:id',verifyAdmin, updateCategory);
 
-router.get('/vehiclebooking', vehicleBooking)
-router.get('/getVahicleData', getVahicleData)
-router.get('/getPackageData', getPackageData)
+router.get('/vehiclebooking',verifyAdmin, vehicleBooking)
+router.get('/getVahicleData',verifyAdmin, getVahicleData)
+router.get('/getPackageData',verifyAdmin, getPackageData)
 
-router.post('/addTestimonial', uploadsMulter, addTestimonial);
-router.delete('/deleteTestimonial/:id', deleteTestimonial);
-router.get('/getTestimonials', getTestimonials)
+router.post('/addTestimonial',verifyAdmin, uploadsMulter, addTestimonial);
+router.delete('/deleteTestimonial/:id',verifyAdmin, deleteTestimonial);
+router.get('/getTestimonials',verifyAdmin, getTestimonials)
 
 
 module.exports = router;
