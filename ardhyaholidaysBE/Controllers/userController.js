@@ -240,4 +240,38 @@ const packageDetails = async (req, res) => {
 };
 
 
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails };
+const getDurationAndLocation = async (req, res) => {
+  try {
+    const packages = await PACKAGE.find({}, 'Duration Location');
+     
+    if (!packages || packages.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No packages found",
+      });
+    }
+
+    const duration= packages.map(pkg => ({
+      Duration: pkg.Duration,
+    }));
+
+     const location = packages.map(pkg => ({
+      destination: pkg.Location
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: { duration, location },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+}
+
+
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation };
