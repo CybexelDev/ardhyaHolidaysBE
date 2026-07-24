@@ -187,5 +187,31 @@ const getSearchResults = async (req, res) => {
 };
 
 
+const vehicleDetails = async (req, res) => {
+  try {
+    const { vehicleId } = req.params;
+    
+    const vehicle = await VEHICLE.findById(vehicleId);
 
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults };
+    if (!vehicle) { 
+      return res.status(404).json({
+        success: false,
+        message: "Vehicle not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      vehicle,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails };
