@@ -6,11 +6,107 @@ const VEHICLE = require('../Models/vehicleModel')
 const PACKAGE = require("../Models/packageModel");
 const VEHICLEBOOKING = require('../Models/vehicleBookingModal')
 const TESTIMONIALS = require("../Models/testimonialsModel");
+const ADMIN = require('../Models/adminModel');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const getPublicIdFromUrl = (url) => {
   const match = url.match(/\/upload\/v\d+\/(.+)\.[a-zA-Z0-9]+$/);
   return match ? match[1] : null;
 };
+
+
+const createAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const adminExist = await ADMIN.findOne({ email });
+
+    if (adminExist) {
+      return res.status(400).json({
+        success: false,
+        message: "Admin already exists",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const admin = new ADMIN({
+      email,
+      password: hashedPassword,
+    });
+
+    await admin.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Admin created successfully",
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
+const adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const admin = await ADMIN.findOne({ email });
+
+    if (!admin) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Email",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, admin.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Password",
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: admin._id,
+        email: admin.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Login Successful",
+      token,
+      admin: {
+        id: admin._id,
+        email: admin.email,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 
 
 const addVehicleData = async (req, res) => {
@@ -74,7 +170,7 @@ const updateVehicleData = async (req, res) => {
   try {
     const vehicleId = req.params.id;
 
-    const {vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, AdvancePayment, TollCharges, Features, oldImages,} = req.body;
+    const {vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, AdvancePayment, TollCharges, Features, oldImages, CategoryId, Premium} = req.body;
 
     const vehicle = await VEHICLE.findById(vehicleId);
 
@@ -133,12 +229,15 @@ const updateVehicleData = async (req, res) => {
     vehicle.RentPerKLM = RentPerKLM;
     vehicle.AdvancePayment = AdvancePayment;
     vehicle.TollCharges = TollCharges;
+    vehicle.CategoryId = CategoryId;
+    vehicle.Premium = Premium;
 
     if (Features) {
       vehicle.Features = Features
         .split(",")
         .map((item) => item.trim());
     }
+
 
     await vehicle.save();
 
@@ -399,4 +498,4 @@ const deleteTestimonial = async (req, res) => {
  
 
 
-module.exports = { addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory }
+module.exports = {createAdmin, adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory  }

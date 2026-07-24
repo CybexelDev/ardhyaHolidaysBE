@@ -142,8 +142,50 @@ success: true,
 }
 
 
+const getSearchResults = async (req, res) => {
+  try {
+    const { destination, duration } = req.query;
+
+    const query = {
+      $or: []
+    };
+
+    if (destination) {
+      query.$or.push({
+        Location: { $regex: destination, $options: "i" }
+      });
+    }
+
+    if (duration) {
+      query.$or.push({
+        Duration: { $regex: duration, $options: "i" }
+      });
+    }
+
+    const searchResults = await PACKAGE.find(query);
+
+    if (searchResults.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No packages found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      count: searchResults.length,
+      packages: searchResults,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 
 
-
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials };
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults };
