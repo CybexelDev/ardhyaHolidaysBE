@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const uploadsMulter = require('../config/cloudinary');
-const {adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData,  addCategory, updatePackageData, vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory, createAdmin} = require('../Controllers/adminController')
+const {adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData,  addCategory, updatePackageData, vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory, createAdmin, getEnquiries} = require('../Controllers/adminController')
 const { getVahicleData, getCategory,  getPackageData, getTestimonials} = require('../Controllers/userController')
 const verifyAdmin = require('../middleware/auth')
 
@@ -30,6 +30,8 @@ router.get('/getPackageData',verifyAdmin, getPackageData)
 router.post('/addTestimonial',verifyAdmin, uploadsMulter, addTestimonial);
 router.delete('/deleteTestimonial/:id',verifyAdmin, deleteTestimonial);
 router.get('/getTestimonials',verifyAdmin, getTestimonials)
+
+router.get('/getEnquiries',verifyAdmin, getEnquiries)
 
 
 module.exports = router;

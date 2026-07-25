@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getVahicleData, getCategory,  getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults,vehicleDetails, packageDetails, getDurationAndLocation } = require('../Controllers/userController')
+const { getVahicleData, getCategory,  getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults,vehicleDetails, packageDetails, getDurationAndLocation,  sentEnquiry } = require('../Controllers/userController')
 
 
 router.get('/getVahicleData', getVahicleData)
@@ -13,6 +13,7 @@ router.get("/getSearchResults", getSearchResults);
 router.get("/vehicleDetails/:vehicleId", vehicleDetails);
 router.get("/packageDetails/:packageId", packageDetails);
 router.get("/getDurationAndLocation", getDurationAndLocation);
+router.post("/sentEnquiry", sentEnquiry);
 
 
 module.exports = router;

@@ -496,6 +496,31 @@ const deleteTestimonial = async (req, res) => {
 }
 
  
+const getEnquiries = async (req, res) => {
+  try{
+    const enquiryData = await ENQUIRY.find();
+
+    if(CATEGORY.length === 0){
+      return res.status(404).json({
+        success: false,
+        message: "No enquiries found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      count: enquiryData.length,
+      enquiryData,
+    });
+
+  }catch(error){
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
 
 
-module.exports = {createAdmin, adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory  }
+module.exports = {createAdmin, adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory, getEnquiries  }

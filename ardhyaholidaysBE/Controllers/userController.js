@@ -4,6 +4,7 @@ const CATEGORY = require('../Models/categoryModel')
 const PACKAGE = require('../Models/packageModel')
 const VEHICLEBOOKING = require('../Models/vehicleBookingModal')
 const TESTIMONIALS = require("../Models/testimonialsModel");
+const ENQUIRY = require("../Models/enquiry");
 
 
 const getVahicleData = async (req, res) => {
@@ -273,5 +274,37 @@ const getDurationAndLocation = async (req, res) => {
 
 }
 
+const sentEnquiry = async (req, res) => { 
+  try {
+    const { name, phoneNumber, destination, startDate, endDate, message } = req.body;
 
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation };
+    const newEnquiry = new ENQUIRY({
+      name,
+      phoneNumber,
+      destination,
+      startDate,
+      endDate,
+      message,
+    }); 
+     
+    const savedEnquiry = await newEnquiry.save();
+
+    res.status(201).json({  
+    success: true,  
+    message: "Enquiry sent successfully",
+      enquiry: savedEnquiry,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+     
+
+
+
+
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation, sentEnquiry};
