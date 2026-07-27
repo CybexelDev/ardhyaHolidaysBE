@@ -1,5 +1,6 @@
 
 const CATEGORY = require('../Models/categoryModel');
+const ENQUIRY = require('../Models/enquiry');
 const { upload } = require('../config/cloudinary');
 const { cloudinary } = require('../config/cloudinary');
 const VEHICLE = require('../Models/vehicleModel')
@@ -522,5 +523,31 @@ const getEnquiries = async (req, res) => {
   }
 }
 
+const getDashboardData = async (req, res) => {
+  try {
+    const vehicleCount = await VEHICLE.countDocuments();
+    const packageCount = await PACKAGE.countDocuments();
+    const bookingCount = await VEHICLEBOOKING.countDocuments();
+    const testimonialCount = await TESTIMONIALS.countDocuments();
+    
 
-module.exports = {createAdmin, adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory, getEnquiries  }
+    res.status(200).json({
+      success: true,
+      data: {
+        vehicleCount,
+        packageCount,
+        bookingCount, 
+        testimonialCount,
+      },
+    });
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).json({message: error.message});
+  }
+}
+
+         
+
+
+module.exports = {createAdmin, adminLogin, addVehicleData, deleteVehicleData, updateVehicleData, addPackageData, deletePackageData, addCategory, updatePackageData,  vehicleBooking, addTestimonial, deleteTestimonial, deleteCategory, updateCategory, getEnquiries, getDashboardData }
