@@ -501,7 +501,7 @@ const getEnquiries = async (req, res) => {
   try{
     const enquiryData = await ENQUIRY.find();
 
-    if(CATEGORY.length === 0){
+    if(enquiryData.length === 0){
       return res.status(404).json({
         success: false,
         message: "No enquiries found",
@@ -529,8 +529,8 @@ const getDashboardData = async (req, res) => {
     const packageCount = await PACKAGE.countDocuments();
     const bookingCount = await VEHICLEBOOKING.countDocuments();
     const testimonialCount = await TESTIMONIALS.countDocuments();
+    const latestEnquiry = await ENQUIRY.find().sort({date: -1}).limit(5);
     
-
     res.status(200).json({
       success: true,
       data: {
@@ -538,6 +538,7 @@ const getDashboardData = async (req, res) => {
         packageCount,
         bookingCount, 
         testimonialCount,
+        latestEnquiry
       },
     });
   }

@@ -32,7 +32,7 @@ router.delete('/deleteTestimonial/:id',verifyAdmin, deleteTestimonial);
 router.get('/getTestimonials',verifyAdmin, getTestimonials)
 
 router.get('/getEnquiries',verifyAdmin, getEnquiries)
-router.get('/dashboard', verifyAdmin, getDashboardData)
+router.get('/getDashboard', verifyAdmin, getDashboardData)
 
 module.exports = router;
 
