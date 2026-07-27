@@ -502,7 +502,7 @@ const getEnquiries = async (req, res) => {
     const enquiryData = await ENQUIRY.find();
 
     if(enquiryData.length === 0){
-      return res.status(404).json({
+      return res.status(404).json({ 
         success: false,
         message: "No enquiries found",
       });
@@ -529,24 +529,33 @@ const getDashboardData = async (req, res) => {
     const packageCount = await PACKAGE.countDocuments();
     const bookingCount = await VEHICLEBOOKING.countDocuments();
     const testimonialCount = await TESTIMONIALS.countDocuments();
-    const latestEnquiry = await ENQUIRY.find().sort({date: -1}).limit(5);
-    
+    const latestEnquiry = await ENQUIRY.find().sort({ date: -1 }).limit(5);
+
+    const monthlyEnquiries = await ENQUIRY.aggregate([
+      {
+        $group: {
+          _id: { $month: "$date" },
+          enquiries: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
     res.status(200).json({
       success: true,
       data: {
         vehicleCount,
         packageCount,
-        bookingCount, 
+        bookingCount,
         testimonialCount,
-        latestEnquiry
+        latestEnquiry,
+        monthlyEnquiries,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  catch (error) {
-    console.log(error);
-    res.status(500).json({message: error.message});
-  }
-}
+};
 
          
 
