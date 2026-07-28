@@ -158,7 +158,7 @@ const getSearchResults = async (req, res) => {
     }
 
     if (duration) {
-      query.Duration = duration;
+      query.Duration = {$regex:`^${duration}$`, $options: "i" } ;
     }
 
     if (packageType) {
