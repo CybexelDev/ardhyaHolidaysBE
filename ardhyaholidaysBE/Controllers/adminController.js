@@ -260,7 +260,7 @@ const updateVehicleData = async (req, res) => {
 
 const addPackageData = async (req, res) => {
   try {
-    const { packageName, subTitle, Location, Duration, Description, Days,} = req.body;
+    const { packageName, subTitle, State, Location, Duration, packageType, Description, Days,} = req.body;
 
 
     const photos = req.files.map((file) => file.path);
@@ -275,8 +275,10 @@ const addPackageData = async (req, res) => {
       Image: photos,
       packageName,
       subTitle,
+      State,
       Location,
       Duration,
+      packageType,
       Description,
       Days: daysArray,
     });

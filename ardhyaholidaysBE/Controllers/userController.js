@@ -145,7 +145,7 @@ success: true,
 
 const getSearchResults = async (req, res) => {
   try {
-    const { destination, duration } = req.query;
+    const { destination, duration, state, packageType } = req.query;
 
     const query = {
       $or: []
@@ -161,6 +161,18 @@ const getSearchResults = async (req, res) => {
       query.$or.push({
         Duration: { $regex: duration, $options: "i" }
       });
+    }
+
+    if(state){
+     query.$or.push({
+      State: {$regex:state, $options: "i"}
+     })
+    }
+
+    if(packageType){
+      query.$or.push({
+        packageType: {$regex:packageType, $options: "i"}
+      })
     }
 
     const searchResults = await PACKAGE.find(query);
@@ -243,7 +255,7 @@ const packageDetails = async (req, res) => {
 
 const getDurationAndLocation = async (req, res) => {
   try {
-    const packages = await PACKAGE.find({}, 'Duration Location');
+    const packages = await PACKAGE.find({}, 'Duration Location State packageType');
      
     if (!packages || packages.length === 0) {
       return res.status(404).json({
@@ -260,9 +272,17 @@ const getDurationAndLocation = async (req, res) => {
       destination: pkg.Location
     }));
 
+     const State = packages.map(pkg => ({
+      State : pkg.State,
+    }));
+
+      const packageType = packages.map(pkg => ({
+      packageType : pkg.packageType,
+    }));
+
     res.status(200).json({
       success: true,
-      data: { duration, location },
+      data: { duration, location, State, packageType},
     });
   } catch (error) {
     console.log(error);

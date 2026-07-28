@@ -14,6 +14,10 @@ const packageSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    State: {
+      type:String,
+      required: true
+    },
     Location: {
         type: String,
         required: true
@@ -21,6 +25,10 @@ const packageSchema = mongoose.Schema({
     Duration: {
         type: String,
         required: true
+    },
+    packageType: {
+      type: String,
+      required: true
     },
     Description: {
         type: String,
