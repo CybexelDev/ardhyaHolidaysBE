@@ -147,32 +147,22 @@ const getSearchResults = async (req, res) => {
   try {
     const { destination, duration, state, packageType } = req.query;
 
-    const query = {
-      $or: []
-    };
+    const query = {};
 
     if (destination) {
-      query.$or.push({
-        Location: { $regex: destination, $options: "i" }
-      });
+      query.Location = { $regex: `^${destination}$`, $options: "i" };
+    }
+
+    if (state) {
+      query.State = { $regex: `^${state}$`, $options: "i" };
     }
 
     if (duration) {
-      query.$or.push({
-        Duration: { $regex: duration, $options: "i" }
-      });
+      query.Duration = duration;
     }
 
-    if(state){
-     query.$or.push({
-      State: {$regex:state, $options: "i"}
-     })
-    }
-
-    if(packageType){
-      query.$or.push({
-        packageType: {$regex:packageType, $options: "i"}
-      })
+    if (packageType) {
+      query.packageType = packageType;
     }
 
     const searchResults = await PACKAGE.find(query);
@@ -191,7 +181,6 @@ const getSearchResults = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,
