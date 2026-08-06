@@ -368,7 +368,9 @@ const updatePackageData = async (req, res) => {
     const {
       packageName,
       subTitle,
+      State,
       Location,
+      packageType,
       Duration,
       Description,
       Days,
@@ -410,7 +412,9 @@ const updatePackageData = async (req, res) => {
     packageData.Image = imageArray;
     packageData.packageName = packageName;
     packageData.subTitle = subTitle;
+    packageData.State = State;
     packageData.Location = Location;
+    packageData.packageType = packageType;
     packageData.Duration = Duration;
     packageData.Description = Description;
     packageData.Days = daysArray;
