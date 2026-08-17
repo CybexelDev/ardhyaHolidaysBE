@@ -311,9 +311,26 @@ const sentEnquiry = async (req, res) => {
     });
   }
 }
+
+const getVehicleNameAndId = async (req, res) => {
+  try {
+    const vehicles = await VEHICLE.find({}, 'vehicleName _id');
+   
+    res.status(200).json({
+      success: true,
+      count: vehicles.length,
+      vehicles,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
      
 
 
 
-
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation, sentEnquiry};
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation, sentEnquiry, getVehicleNameAndId};
