@@ -87,7 +87,7 @@ const relatedVehicles = async (req, res) => {
 
 const bookingVehicle = async (req, res) =>{
     try{
-           const { vehicleId, pickupDate, returnDate, customerName, customerPhone } = req.body;
+           const { vehicleId, pickupDate, returnDate, startLocation, destination,  customerName, customerPhone } = req.body;
          
            
            const vehicle = await VEHICLE.findById(vehicleId);
@@ -103,6 +103,8 @@ const bookingVehicle = async (req, res) =>{
                 vehicleId,
                 pickupDate,
                 returnDate,
+                startLocation,
+                destination,
                 customerName,
                 customerPhone,
               });

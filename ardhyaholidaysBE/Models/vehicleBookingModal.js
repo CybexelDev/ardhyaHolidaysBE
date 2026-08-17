@@ -11,8 +11,17 @@ const vehicleBookingSchema = mongoose.Schema({
         type: Date,
         required: true
     },
+ 
     returnDate: {
         type: Date,
+        required: true
+    },
+       startLocation: {
+        type: String,
+        required: true
+    },
+    destination: {
+        type: String,
         required: true
     },
     customerName: {
