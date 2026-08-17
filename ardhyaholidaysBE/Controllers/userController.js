@@ -255,21 +255,17 @@ const getDurationAndLocation = async (req, res) => {
       });
     }
 
-    const duration= packages.map(pkg => ({
-      Duration: pkg.Duration,
-    }));
+  const duration = [...new Set(packages.map(pkg => pkg.Duration))]
+  .map(Duration => ({ Duration }));
 
-     const location = packages.map(pkg => ({
-      destination: pkg.Location
-    }));
+const location = [...new Set(packages.map(pkg => pkg.Location))]
+  .map(destination => ({ destination }));
 
-     const State = packages.map(pkg => ({
-      State : pkg.State,
-    }));
+const State = [...new Set(packages.map(pkg => pkg.State))]
+  .map(State => ({ State }));
 
-      const packageType = packages.map(pkg => ({
-      packageType : pkg.packageType,
-    }));
+const packageType = [...new Set(packages.map(pkg => pkg.packageType))]
+  .map(packageType => ({ packageType }));
 
     res.status(200).json({
       success: true,
