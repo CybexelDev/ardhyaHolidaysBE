@@ -310,14 +310,14 @@ const sentEnquiry = async (req, res) => {
   }
 }
 
-const getVehicleNameAndId = async (req, res) => {
+const getPackageNameAndId = async (req, res) => {
   try {
-    const vehicles = await VEHICLE.find({}, 'vehicleName _id');
-   
+    const packages = await PACKAGE.find({}, 'packageName _id');
+
     res.status(200).json({
       success: true,
-      count: vehicles.length,
-      vehicles,
+      count: packages.length,
+      packages,
     });
   } catch (error) {
     console.log(error);
@@ -327,8 +327,9 @@ const getVehicleNameAndId = async (req, res) => {
     });
   }
 }
+
+
      
 
 
-
-module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation, sentEnquiry, getVehicleNameAndId};
+module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation, sentEnquiry, getPackageNameAndId};

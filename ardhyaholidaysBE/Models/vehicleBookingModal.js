@@ -4,7 +4,7 @@ const vehicleBookingSchema = mongoose.Schema({
 
      vehicleId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "vehicles",  
+    ref: "vehicles", 
     required: true,
   },
     pickupDate: {
