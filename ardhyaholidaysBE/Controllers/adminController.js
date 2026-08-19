@@ -172,8 +172,8 @@ const updateVehicleData = async (req, res) => {
   try {
     const vehicleId = req.params.id;
 
-    const {vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, AdvancePayment, TollCharges, Features, oldImages, CategoryId, Premium} = req.body;
-
+    const {vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, RatePerDay, AdvancePayment, TollCharges, Features, oldImages, CategoryId, Premium} = req.body;
+ 
     const vehicle = await VEHICLE.findById(vehicleId);
 
     if (!vehicle) {
@@ -229,6 +229,7 @@ const updateVehicleData = async (req, res) => {
     vehicle.TV = TV;
     vehicle.StarRating = StarRating;
     vehicle.RentPerKLM = RentPerKLM;
+    vehicle.RatePerDay = RatePerDay;
     vehicle.AdvancePayment = AdvancePayment;
     vehicle.TollCharges = TollCharges;
     vehicle.CategoryId = CategoryId;
