@@ -47,6 +47,10 @@ const vehiclesSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    RatePerDay: {
+        type: Number,
+        required: true
+    },
     AdvancePayment: {
         type: Number,
         required: true

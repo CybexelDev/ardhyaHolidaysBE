@@ -112,7 +112,7 @@ const adminLogin = async (req, res) => {
 
 const addVehicleData = async (req, res) => {
 
-  const { vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, AdvancePayment, TollCharges, Features, CategoryId,  Premium } = req.body;
+  const { vehicleName, vehicleNumber, Location, Description, SeatCapacity, MusicSystem, AC, TV, StarRating, RentPerKLM, RatePerDay, AdvancePayment, TollCharges, Features, CategoryId,  Premium } = req.body;
 
   const photos = req.files.map((file) => {
     return file.path
@@ -134,6 +134,7 @@ const addVehicleData = async (req, res) => {
       TV,
       StarRating,
       RentPerKLM,
+      RatePerDay,
       AdvancePayment,
       TollCharges,
       Features: featuresArray,

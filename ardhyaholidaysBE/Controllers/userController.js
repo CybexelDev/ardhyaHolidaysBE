@@ -329,7 +329,6 @@ const getPackageNameAndId = async (req, res) => {
 }
 
 
-     
 
 
 module.exports = { getVahicleData, getCategory, getPackageData, relatedVehicles, bookingVehicle, getTestimonials, getSearchResults, vehicleDetails, packageDetails, getDurationAndLocation, sentEnquiry, getPackageNameAndId};
